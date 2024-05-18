@@ -39,8 +39,8 @@ public class Curve{
             Debug.LogError("There must be atleast 4 points!");
             throw new Exception();
         }
-        if (controlPoints.Count % 4 != 0) {
-            Debug.LogError("There must be 4*n in control points in bezier curve!");
+        if ((controlPoints.Count - 1) % 3 != 0) {
+            Debug.LogError("There must be 3*n+1 control points in bezier curve!");
             throw new Exception();
         }
 
@@ -52,8 +52,8 @@ public class Curve{
             Debug.LogError("There must be atleast 4 points!");
             throw new Exception();
         }
-        if (_curveType == CurveType.Bezier && controlPoints.Count % 4 != 0) {
-            Debug.LogError("There must be 4*n in control points in bezier curve!");
+        if (_curveType == CurveType.Bezier && (controlPoints.Count - 1) % 3 != 0) {
+            Debug.LogError("There must be 3*n+1 control points in bezier curve!");
             throw new Exception();
         }
 
@@ -67,10 +67,22 @@ public class Curve{
             throw new Exception();
         }
 
-        int segment = Mathf.FloorToInt(t / 4);
-        float tSegment = t % 4f;
+        int segment = 0;
+        float tSegment = 0f;
+        if (_curveType == CurveType.Bezier) {
+            t = t / 3;
+            segment = Mathf.FloorToInt(t) * 3;
+            tSegment = t % 1;
 
-        
+            if (segment == _controlPoints.Count - 1) {
+                segment -= 3;
+            }
+
+        } else {
+            segment = Mathf.FloorToInt(t);
+            tSegment = (t % 3f);
+        }
+
         Matrix4x4 G = new Matrix4x4(
             new Vector4(_controlPoints[segment].x, _controlPoints[segment].y, _controlPoints[segment].z, 0f),
             new Vector4(_controlPoints[segment + 1].x, _controlPoints[segment + 1].y, _controlPoints[segment + 1].z, 0f),
@@ -79,9 +91,9 @@ public class Curve{
         );
 
         Matrix4x4 B = basises[_curveType];
-        Vector4 T = new Vector4(1, t, t * t, t * t * t);
-        Vector4 T_1 = new Vector4(0, 1, 2 * t, 3 * t * t);
-        Vector4 T_2 = new Vector4(0, 0, 2, 6 * t);
+        Vector4 T = new Vector4(1, tSegment, tSegment * tSegment, tSegment * tSegment * tSegment);
+        Vector4 T_1 = new Vector4(0, 1, 2 * tSegment, 3 * tSegment * tSegment);
+        Vector4 T_2 = new Vector4(0, 0, 2, 6 * tSegment);
 
         Vector4 V = G * B * T;
         Vector4 Vel = G * B * T_1;

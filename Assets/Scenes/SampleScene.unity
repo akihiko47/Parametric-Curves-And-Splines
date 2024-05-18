@@ -132,31 +132,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 260569098}
-  - component: {fileID: 260569097}
+  - component: {fileID: 260569099}
   m_Layer: 0
-  m_Name: Curve Test
+  m_Name: World Curve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &260569097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 260569096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c6ecd37c9f0b5444bf17eb4dd404d85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controlPoints:
-  - {x: 0, y: 0, z: 0}
-  - {x: 3, y: 5, z: 3}
-  - {x: 7, y: -5, z: 0}
-  - {x: 10, y: 0, z: 0}
 --- !u!4 &260569098
 Transform:
   m_ObjectHideFlags: 0
@@ -166,12 +149,37 @@ Transform:
   m_GameObject: {fileID: 260569096}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.69, y: 0, z: 5.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &260569099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260569096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ba12569d02a7014098e192d399d61f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curveType: 0
+  controlPoints:
+  - {x: -14.972805, y: 0, z: -4.5080433}
+  - {x: -0.75587654, y: -5, z: -14.03668}
+  - {x: 13.249696, y: 5, z: 0.5345955}
+  - {x: 15.025957, y: -5, z: -17.519245}
+  - {x: 14.849873, y: 5, z: 24.04313}
+  - {x: 23.898397, y: -5, z: -18.601067}
+  - {x: 30.608023, y: -4.4825077, z: -6.913351}
+  - {x: 33.908207, y: -5, z: -16.9012}
+  - {x: 65.621796, y: 5, z: 29.989735}
+  - {x: 56.724213, y: -5, z: -13.0878105}
+  raysLength: 0.33
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
