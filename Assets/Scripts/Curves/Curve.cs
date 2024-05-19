@@ -20,10 +20,10 @@ public class Curve{
     );
 
     private static Matrix4x4 bsplineBasis = new Matrix4x4(
-        new Vector4(1f, 4f, 1f, 0f),
-        new Vector4(-3f, 0f, 3f, 0f),
-        new Vector4(3f, -6f, 3f, 0f),
-        new Vector4(-1f, 3f, -3f, 1f)
+        new Vector4(1 / 6f, 4 / 6f, 1f / 6, 0f / 6),
+        new Vector4(-3 / 6f, 0f / 6, 3f / 6, 0f / 6),
+        new Vector4(3f / 6, -6f / 6, 3f / 6, 0f / 6),
+        new Vector4(-1f / 6, 3f / 6, -3f / 6, 1f / 6)
     );
 
 
@@ -80,7 +80,10 @@ public class Curve{
 
         } else {
             segment = Mathf.FloorToInt(t);
-            tSegment = (t % 3f);
+            if (segment > _controlPoints.Count - 5) {
+                segment = _controlPoints.Count - 5;
+            }
+            tSegment = t - segment;
         }
 
         Matrix4x4 G = new Matrix4x4(
