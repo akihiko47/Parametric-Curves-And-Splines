@@ -67,16 +67,9 @@ public class Curve{
             throw new Exception();
         }
 
-        int segment = 0;
-        float tSegment = 0f;
-        if (_curveType == CurveType.Bezier) {
-            t = t / 3;
-            segment = Mathf.FloorToInt(t) * 3;
-            tSegment = t % 1;
-        } else {
-            segment = Mathf.FloorToInt(t);
-            tSegment = t % 1;
-        }
+        t = t / (_curveType == CurveType.Bezier ? 3 : 1);
+        int segment = Mathf.FloorToInt(t) * (_curveType == CurveType.Bezier ? 3 : 1);
+        float tSegment = t % 1;
 
         Matrix4x4 G = new Matrix4x4(
             new Vector4(_controlPoints[segment].x, _controlPoints[segment].y, _controlPoints[segment].z, 0f),

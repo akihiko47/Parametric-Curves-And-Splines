@@ -29,10 +29,6 @@ public class WorldCurve : MonoBehaviour {
     private void OnDrawGizmos() {
         curve = new Curve(curveType, controlPoints);
 
-        if (curve == null) {
-            return;
-        }
-
         float t = 0;
         while (t <= GetMaxPointInd()) {
             curve.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
