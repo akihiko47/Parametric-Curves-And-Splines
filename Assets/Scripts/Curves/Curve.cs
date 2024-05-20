@@ -62,7 +62,7 @@ public class Curve{
     }
 
     public void P(float t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal) {
-        if (t < 0 || t > _controlPoints.Count) {
+        if (t < 0 || t > _controlPoints.Count - (_curveType == Curve.CurveType.Bezier ? 1 : 3)) {
             Debug.LogError("t value is out of bounds!");
             throw new Exception();
         }
@@ -73,17 +73,9 @@ public class Curve{
             t = t / 3;
             segment = Mathf.FloorToInt(t) * 3;
             tSegment = t % 1;
-
-            if (segment == _controlPoints.Count - 1) {
-                segment -= 3;
-            }
-
         } else {
             segment = Mathf.FloorToInt(t);
-            if (segment > _controlPoints.Count - 5) {
-                segment = _controlPoints.Count - 5;
-            }
-            tSegment = t - segment;
+            tSegment = t % 1;
         }
 
         Matrix4x4 G = new Matrix4x4(

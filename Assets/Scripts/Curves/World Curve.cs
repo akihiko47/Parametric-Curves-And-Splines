@@ -27,12 +27,14 @@ public class WorldCurve : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
+        curve = new Curve(curveType, controlPoints);
+
         if (curve == null) {
             return;
         }
 
         float t = 0;
-        while (t <= controlPoints.Count) {
+        while (t <= GetMaxPointInd()) {
             curve.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
 
             Gizmos.color = Color.white;
@@ -54,5 +56,17 @@ public class WorldCurve : MonoBehaviour {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(controlPoints[i], 0.2f);
         }
+    }
+
+    public Curve GetCurve() {
+        return curve;
+    }
+
+    public Curve.CurveType GetCurveType() {
+        return curveType;
+    }
+
+    public int GetMaxPointInd() {
+        return controlPoints.Count - (curveType == Curve.CurveType.Bezier ? 1 : 3);
     }
 }
