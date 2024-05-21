@@ -8,12 +8,14 @@ public class SplineEditor : Editor {
     SerializedProperty strength;
     SerializedProperty controlPoints;
     SerializedProperty raysLength;
+    SerializedProperty drawStep;
 
     void OnEnable() {
         curveType = serializedObject.FindProperty("curveType");
         strength = serializedObject.FindProperty("strength");
         controlPoints = serializedObject.FindProperty("controlPoints");
         raysLength = serializedObject.FindProperty("raysLength");
+        drawStep = serializedObject.FindProperty("drawStep");
     }
 
     public override void OnInspectorGUI() {
@@ -28,6 +30,7 @@ public class SplineEditor : Editor {
 
         EditorGUILayout.PropertyField(controlPoints);
         EditorGUILayout.PropertyField(raysLength);
+        EditorGUILayout.PropertyField(drawStep);
 
         if (GUILayout.Button("Reset Control Points")) {
             script.ResetControlPoints();

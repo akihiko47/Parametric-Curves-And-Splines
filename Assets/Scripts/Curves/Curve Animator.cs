@@ -16,8 +16,8 @@ public class CurveAnimator : MonoBehaviour {
             float t = time / animationTime * spline.GetMaxPointInd();
             spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
 
-            animatedObject.transform.rotation = Quaternion.LookRotation(tangent, normal);
             animatedObject.transform.position = vertex;
+            animatedObject.transform.forward = tangent;
 
             time += Time.deltaTime;
         } else {

@@ -14,7 +14,10 @@ public class Spline : MonoBehaviour {
     public List<Vector3> controlPoints = new List<Vector3>();
 
     [SerializeField, Range(0f, 10f)]
-    private float raysLength;
+    private float raysLength = 0.3f;
+
+    [SerializeField, Range(0.05f, 1f)]
+    private float drawStep = 0.05f;
 
     public void ResetControlPoints() {
         controlPoints[0] = Vector3.zero;
@@ -32,7 +35,7 @@ public class Spline : MonoBehaviour {
         while (t <= GetMaxPointInd()) {
             Curve.P(t, curveType, controlPoints, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal, strength);
 
-            Gizmos.color = Color.white;
+            Gizmos.color = new Color(233f/255f, 216f/255f, 166f/255f);
             Gizmos.DrawSphere(vertex, 0.1f);
 
             Gizmos.color = Color.blue;
@@ -44,11 +47,11 @@ public class Spline : MonoBehaviour {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(vertex, vertex + binormal * raysLength);
 
-            t += 0.05f;
+            t += drawStep;
         }
 
         for (int i = 0; i < controlPoints.Count; i++) {
-            Gizmos.color = Color.red;
+            Gizmos.color = new Color(174/255f, 32 / 255f, 18 / 255f);
             Gizmos.DrawSphere(controlPoints[i], 0.2f);
         }
     }

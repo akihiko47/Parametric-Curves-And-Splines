@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.4113207, g: 0.4113207, b: 0.4113207, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: a0ac53c30472eac4a8b096cd8deb9117, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0.07086166, b: 0.09838905, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -183,7 +183,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: bc12f54a8946cd946bcdddafefbb6f83, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -274,22 +274,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curveType: 2
-  strength: 1
+  strength: 0.5
   controlPoints:
   - {x: 0, y: 0, z: 0}
   - {x: 5, y: -5, z: 0}
   - {x: 10, y: 5, z: 0}
-  - {x: 15.779716, y: -5, z: -13.187971}
-  - {x: 20, y: 5, z: 0}
-  - {x: 24.12544, y: -5, z: 12.174084}
-  - {x: 27.70667, y: 5, z: -3.2308064}
-  - {x: 34.92614, y: -5, z: 18.39235}
-  - {x: 36.94398, y: 5, z: -12.629124}
-  - {x: 41.10784, y: 13.879912, z: -5.720009}
-  - {x: 43.03532, y: 5, z: -12.084943}
+  - {x: 15, y: -5, z: 0}
+  - {x: 19.557234, y: 2.3729432, z: 0}
+  - {x: 23.612679, y: -3.7307498, z: 4.634562}
+  - {x: 30.265656, y: 9.163279, z: 0}
+  - {x: 33.406055, y: -3.3175056, z: 0}
+  - {x: 40, y: 0.33623934, z: 0}
+  - {x: 46.977676, y: -4.852413, z: 0}
+  - {x: 50, y: 5, z: 0}
   - {x: 55, y: -5, z: 0}
   - {x: 60, y: 5, z: 0}
-  raysLength: 0.33
+  raysLength: 0
+  drawStep: 0.05
 --- !u!114 &260569100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animatedObject: {fileID: 8702931}
   spline: {fileID: 260569099}
-  animationTime: 10
+  animationTime: 4
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,8 +485,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1939883, y: -0.12689547, z: 0.02000737, w: -0.97255635}
-  m_LocalPosition: {x: 7.848774, y: 8.893606, z: -21.548035}
+  m_LocalRotation: {x: 0.0033493491, y: -0.9794567, z: 0.023813048, w: 0.20021571}
+  m_LocalPosition: {x: 18.538343, y: 3.1224675, z: 3.665416}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
