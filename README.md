@@ -1,5 +1,5 @@
 # 〰️SPLINES〰️
-In this repository, I have implemented a tool for creating, editing splines. The scripts give easy access to the points of the curve and the ability to get the point, tangent, normal and binormal at the desired point of the curve.
+In this repository, I have implemented a tool for creating and editing splines. The scripts give easy access to points on curve and the ability to get the position, tangent, normal and binormal at the desired point of the curve.
 
 ## Installation
 There are 2 ways:
