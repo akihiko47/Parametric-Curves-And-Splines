@@ -3,9 +3,9 @@ In this repository, I have implemented a tool for creating, editing splines. The
 
 ## Curve types 🔢
 The `Curve` class implements 3 matrices for different curve types. You can switch types in real time in the curve editors.
-1) Bézier
-2) B-spline
-3) Cardinal
+1) **Bézier**
+2) **B-spline**
+3) **Cardinal**
 
 ![curves](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/curves.gif)
 
@@ -16,8 +16,12 @@ Redactor is automatically connected to an GameObject that has a `Spline` compone
 ## Usage 🎮
 You can see a simple example of how to use it in the `Curve Animator` file. Curve information can be accesed using `P()` method of `Spline` class.
 
->   `spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);`
+   ```sh
+   spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
+   ```
 
 where `t` - position of point on curve [0 -> spline.GetMaxPointInd()]
+
+
 
 ## 🏗️ Work in progress... 🏗️
