@@ -9,6 +9,7 @@ public class CurveAnimator : MonoBehaviour {
 
     [SerializeField]
     float animationTime;
+
     float time = 0f;
 
     private void Update() {
