@@ -1,6 +1,11 @@
 # 〰️SPLINES〰️
 In this repository, I have implemented a tool for creating, editing splines. The scripts give easy access to the points of the curve and the ability to get the point, tangent, normal and binormal at the desired point of the curve.
 
+## Installation
+There are 2 ways:
+- import Splines.unitypackage via *Assets-Import* Package
+- clone/download this repository and move the `Assets/Scripts/Curves` folder to your Unity project's Assets folder
+
 ## Curve types 🔢
 The `Curve` class implements 3 matrices for different curve types. You can switch types in real time in the curve editors.
 1) **Bézier**
