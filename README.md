@@ -7,7 +7,7 @@ There are 2 ways:
 - clone/download this repository and move the `Assets/Scripts/Curves` folder to your Unity project's Assets folder
 
 ## Curve types 🔢
-The `Curve` class implements 3 matrices for different curve types. You can switch types in real time in the curve editors.
+The `Curve` class implements 3 matrices for different curve types. You can switch between types in real time using curves redactor.
 1) **Bézier**
 2) **B-spline**
 3) **Cardinal**
@@ -15,7 +15,7 @@ The `Curve` class implements 3 matrices for different curve types. You can switc
 ![curves](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/curves.gif)
 
 ## Redactor 🖌️
-The editor allows you to see the curve, normals, tangents and binormals. You can change the location and reset the control points.
+The redactor allows you to see the curve, normals, tangents and binormals. You can also change the location of control points and reset them.
 Redactor is automatically connected to an GameObject that has a `Spline` component.
 
 ## Usage 🎮
