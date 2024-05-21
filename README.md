@@ -14,7 +14,7 @@ The editor allows you to see the curve, normals, tangents and binormals. You can
 Redactor is automatically connected to an GameObject that has a `Spline` component.
 
 ## Usage 🎮
-You can see a simple example of how to use it in the `Curve Animator` file. Curve information can be accesed using `P()` method of `Spline` class.
+You can see a simple example of how to use it in the [Curve Animator](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Assets/Scripts/Curves/Curve%20Animator.cs) file. Curve information can be accesed using `P()` method of `Spline` class.
 
    ```sh
    spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
