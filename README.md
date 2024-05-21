@@ -3,7 +3,7 @@ In this repository, I have implemented a tool for creating and editing splines. 
 
 ## Installation
 There are 2 ways:
-- import Splines.unitypackage via *Assets-Import* Package
+- import `Splines.unitypackage` via *Assets-Import* Package
 - clone/download this repository and move the `Assets/Scripts/Curves` folder to your Unity project's Assets folder
 
 ## Curve types 🔢
