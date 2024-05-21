@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 260569099}
   - component: {fileID: 260569100}
   m_Layer: 0
-  m_Name: World Curve
+  m_Name: Test Curve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
