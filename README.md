@@ -1,6 +1,6 @@
 # SPLINES
 
-![logo](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/banner.gif)
+![banner](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/banner.gif)
 
 ## Curve types
 1) Bézier
