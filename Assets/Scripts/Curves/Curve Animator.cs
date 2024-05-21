@@ -5,7 +5,7 @@ public class CurveAnimator : MonoBehaviour {
     GameObject animatedObject;
 
     [SerializeField]
-    WorldCurve curve;
+    Spline spline;
 
     [SerializeField]
     float animationTime;
@@ -13,8 +13,8 @@ public class CurveAnimator : MonoBehaviour {
 
     private void Update() {
         if (time < animationTime) {
-            float t = time / animationTime * curve.GetMaxPointInd();
-            curve.GetCurve().P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
+            float t = time / animationTime * spline.GetMaxPointInd();
+            spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
 
             animatedObject.transform.position = vertex;
             animatedObject.transform.right = binormal;

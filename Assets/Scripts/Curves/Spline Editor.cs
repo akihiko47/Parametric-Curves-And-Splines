@@ -1,24 +1,31 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(WorldCurve))]
+[CustomEditor(typeof(Spline))]
 [CanEditMultipleObjects]
-public class LookAtPointEditor : Editor {
+public class SplineEditor : Editor {
     SerializedProperty curveType;
+    SerializedProperty strength;
     SerializedProperty controlPoints;
     SerializedProperty raysLength;
 
     void OnEnable() {
         curveType = serializedObject.FindProperty("curveType");
+        strength = serializedObject.FindProperty("strength");
         controlPoints = serializedObject.FindProperty("controlPoints");
         raysLength = serializedObject.FindProperty("raysLength");
     }
 
     public override void OnInspectorGUI() {
-        WorldCurve script = (WorldCurve)target;
+        Spline script = (Spline)target;
 
         serializedObject.Update();
         EditorGUILayout.PropertyField(curveType);
+
+        if (script.GetCurveType() == Curve.CurveType.Cardinal) {
+            EditorGUILayout.PropertyField(strength);
+        }
+
         EditorGUILayout.PropertyField(controlPoints);
         EditorGUILayout.PropertyField(raysLength);
 
@@ -30,7 +37,7 @@ public class LookAtPointEditor : Editor {
     }
 
     public void OnSceneGUI() {
-        WorldCurve script = (WorldCurve)target;
+        Spline script = (Spline)target;
 
         
         for (int i = 0; i < script.controlPoints.Count; i++) {

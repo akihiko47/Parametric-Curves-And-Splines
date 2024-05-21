@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Curve{
+public static class Curve{
 
     public enum CurveType {
         Bezier,
         BSpline,
+        Cardinal,
     }
-
-    private CurveType _curveType;
 
     private static Matrix4x4 bezierBasis = new Matrix4x4(
         new Vector4(1f, 0f, 0f, 0f), 
@@ -26,67 +25,72 @@ public class Curve{
         new Vector4(-1f / 6, 3f / 6, -3f / 6, 1f / 6)
     );
 
-
-    private Dictionary<CurveType, Matrix4x4> basises = new Dictionary<CurveType, Matrix4x4>() {
+    public static Dictionary<CurveType, Matrix4x4> basises = new Dictionary<CurveType, Matrix4x4>() {
         {CurveType.Bezier, bezierBasis},
         {CurveType.BSpline, bsplineBasis}
     };
 
-    private List<Vector3> _controlPoints;
+    public static Dictionary<CurveType, int> stepInd = new Dictionary<CurveType, int>() {
+        {CurveType.Bezier, 3},
+        {CurveType.BSpline, 1},
+        {CurveType.Cardinal, 1}
+    };
 
-    public Curve(List<Vector3> controlPoints) {
-        if (controlPoints.Count < 4) {
-            Debug.LogError("There must be atleast 4 points!");
-            throw new Exception();
-        }
-        if ((controlPoints.Count - 1) % 3 != 0) {
-            Debug.LogError("There must be 3*n+1 control points in bezier curve!");
-            throw new Exception();
-        }
-
-            _curveType = CurveType.Bezier;
-        _controlPoints = controlPoints;
-    }
-    public Curve(CurveType type, List<Vector3> controlPoints) {
-        if (controlPoints.Count < 4) {
-            Debug.LogError("There must be atleast 4 points!");
-            throw new Exception();
-        }
-        if (_curveType == CurveType.Bezier && (controlPoints.Count - 1) % 3 != 0) {
-            Debug.LogError("There must be 3*n+1 control points in bezier curve!");
-            throw new Exception();
-        }
-
-        _curveType = type;
-        _controlPoints = controlPoints;
+    public static Matrix4x4 GetCardinalBasis(float s) {
+        return new Matrix4x4(
+            new Vector4(0f, -s, 2f*s, -s),
+            new Vector4(1f, 0f, s-3f, 2f-s),
+            new Vector4(0f, s, 3f-2f*s, s-2f),
+            new Vector4(0f, 0f, -s, s)
+        ).transpose;
     }
 
-    public void P(float t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal) {
-        if (t < 0 || t > _controlPoints.Count - (_curveType == Curve.CurveType.Bezier ? 1 : 3)) {
+    public static void P(float t, CurveType type, List<Vector3> controlPoints, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal, float s=0.5f) {
+        if (t < 0 || t > controlPoints.Count - (4 - stepInd[type])) {
             Debug.LogError("t value is out of bounds!");
             throw new Exception();
         }
 
-        t = t / (_curveType == CurveType.Bezier ? 3 : 1);
-        int segment = Mathf.FloorToInt(t) * (_curveType == CurveType.Bezier ? 3 : 1);
+        if (controlPoints.Count < 4) {
+            Debug.LogError("There must be atleast 4 control points!");
+            throw new Exception();
+        }
+
+        if (((controlPoints.Count - 1) % 3) != 0 && type == CurveType.Bezier) {
+            Debug.LogError("There must be 3n+1 control points in Bezier curve!");
+            throw new Exception();
+        }
+
+        t = t / stepInd[type];
+        int segment = Mathf.FloorToInt(t) * stepInd[type];
         float tSegment = t % 1;
 
         Matrix4x4 G = new Matrix4x4(
-            new Vector4(_controlPoints[segment].x, _controlPoints[segment].y, _controlPoints[segment].z, 0f),
-            new Vector4(_controlPoints[segment + 1].x, _controlPoints[segment + 1].y, _controlPoints[segment + 1].z, 0f),
-            new Vector4(_controlPoints[segment + 2].x, _controlPoints[segment + 2].y, _controlPoints[segment + 2].z, 0f),
-            new Vector4(_controlPoints[segment + 3].x, _controlPoints[segment + 3].y, _controlPoints[segment + 3].z, 0f)
+            new Vector4(controlPoints[segment].x, controlPoints[segment].y, controlPoints[segment].z, 0f),
+            new Vector4(controlPoints[segment + 1].x, controlPoints[segment + 1].y, controlPoints[segment + 1].z, 0f),
+            new Vector4(controlPoints[segment + 2].x, controlPoints[segment + 2].y, controlPoints[segment + 2].z, 0f),
+            new Vector4(controlPoints[segment + 3].x, controlPoints[segment + 3].y, controlPoints[segment + 3].z, 0f)
         );
 
-        Matrix4x4 B = basises[_curveType];
+        // Get basis matrix (special case for Cardinal curve)
+        Matrix4x4 B;
+        if (type == CurveType.Cardinal) {
+            B = GetCardinalBasis(s);
+        } else {
+            B = basises[type];
+        }
+
+        // Monomial basis and derivatives
         Vector4 T = new Vector4(1, tSegment, tSegment * tSegment, tSegment * tSegment * tSegment);
         Vector4 T_1 = new Vector4(0, 1, 2 * tSegment, 3 * tSegment * tSegment);
         Vector4 T_2 = new Vector4(0, 0, 2, 6 * tSegment);
 
+        // Position, Velocity, Acceleration
         Vector4 V = G * B * T;
         Vector4 Vel = G * B * T_1;
         Vector4 Acc = G * B * T_2;
 
+        // Calculating Normal
         Vector3 a = new Vector3(Vel[0], Vel[1], Vel[2]);
         Vector3 b = (a + new Vector3(Acc[0], Acc[1], Acc[2])).normalized;
         Vector3 r = Vector3.Cross(b, a).normalized;

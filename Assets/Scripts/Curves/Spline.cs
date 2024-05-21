@@ -2,22 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class WorldCurve : MonoBehaviour {
+public class Spline : MonoBehaviour {
 
     [SerializeField]
     private Curve.CurveType curveType = Curve.CurveType.Bezier;
+
+    [SerializeField, Range(0f, 1f)]
+    private float strength;
 
     [SerializeField]
     public List<Vector3> controlPoints = new List<Vector3>();
 
     [SerializeField, Range(0f, 10f)]
     private float raysLength;
-
-    private Curve curve;
-
-    private void OnEnable() {
-        curve = new Curve(curveType, controlPoints);
-    }
 
     public void ResetControlPoints() {
         controlPoints[0] = Vector3.zero;
@@ -26,12 +23,14 @@ public class WorldCurve : MonoBehaviour {
         }
     }
 
-    private void OnDrawGizmos() {
-        curve = new Curve(curveType, controlPoints);
+    public void P(float t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal) {
+        Curve.P(t, curveType, controlPoints, out vertex, out tangent, out normal, out binormal, strength);
+    }
 
+    private void OnDrawGizmos() {
         float t = 0;
         while (t <= GetMaxPointInd()) {
-            curve.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
+            Curve.P(t, curveType, controlPoints, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal, strength);
 
             Gizmos.color = Color.white;
             Gizmos.DrawSphere(vertex, 0.1f);
@@ -54,15 +53,16 @@ public class WorldCurve : MonoBehaviour {
         }
     }
 
-    public Curve GetCurve() {
-        return curve;
-    }
-
     public Curve.CurveType GetCurveType() {
         return curveType;
     }
 
-    public int GetMaxPointInd() {
-        return controlPoints.Count - (curveType == Curve.CurveType.Bezier ? 1 : 3);
+    public List<Vector3> GetControlPoints() {
+        return controlPoints;
     }
+
+    public int GetMaxPointInd() {
+        return controlPoints.Count - (4 - Curve.stepInd[curveType]);
+    }
+
 }

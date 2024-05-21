@@ -273,21 +273,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ba12569d02a7014098e192d399d61f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curveType: 1
+  curveType: 2
+  strength: 1
   controlPoints:
   - {x: 0, y: 0, z: 0}
   - {x: 5, y: -5, z: 0}
-  - {x: 10, y: 13.22231, z: 0}
-  - {x: 15, y: -5, z: -11.44266}
-  - {x: 20, y: 10.554462, z: 0}
-  - {x: 25, y: -5, z: 20.804167}
-  - {x: 30, y: 5, z: 0}
-  - {x: 31.309614, y: -5, z: -9.443519}
-  - {x: 40, y: 5, z: 0}
-  - {x: 41.47792, y: -5, z: 15.526553}
-  - {x: 52.733887, y: 10.954906, z: 0}
-  - {x: 57.82928, y: -5, z: -7.093379}
-  - {x: 69.58519, y: -5, z: -11.294392}
+  - {x: 10, y: 5, z: 0}
+  - {x: 15.779716, y: -5, z: -13.187971}
+  - {x: 20, y: 5, z: 0}
+  - {x: 24.12544, y: -5, z: 12.174084}
+  - {x: 27.70667, y: 5, z: -3.2308064}
+  - {x: 34.92614, y: -5, z: 18.39235}
+  - {x: 36.94398, y: 5, z: -12.629124}
+  - {x: 41.10784, y: 13.879912, z: -5.720009}
+  - {x: 43.03532, y: 5, z: -12.084943}
+  - {x: 55, y: -5, z: 0}
+  - {x: 60, y: 5, z: 0}
   raysLength: 0.33
 --- !u!114 &260569100
 MonoBehaviour:
@@ -302,7 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedObject: {fileID: 8702931}
-  curve: {fileID: 260569099}
+  spline: {fileID: 260569099}
   animationTime: 10
 --- !u!1 &705507993
 GameObject:
