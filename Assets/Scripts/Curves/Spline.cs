@@ -65,10 +65,8 @@ public class Spline : MonoBehaviour {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(vertex, vertex + normal * raysLength);
 
-            if (!normals2D) {
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(vertex, vertex + binormal * raysLength);
-            }
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(vertex, vertex + binormal * raysLength);
 
             t += drawStep;
         }
