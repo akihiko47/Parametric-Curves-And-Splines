@@ -20,6 +20,8 @@ The `Curve` class implements 3 matrices for different curve types. You can switc
 The redactor allows you to see the curve, normals, tangents and binormals. You can also change the location of control points and reset them.
 Redactor is automatically connected to a GameObject that has a `Spline` component.
 
+![redactor](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/redactor.gif)
+
 ## Usage 🎮
 You can see a simple example of how to use it in the [Curve Animator](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Assets/Scripts/Curves/Curve%20Animator.cs) file. Curve information can be accesed using `P()` method of `Spline` class.
 
