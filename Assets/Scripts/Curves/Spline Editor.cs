@@ -1,10 +1,16 @@
 using UnityEngine;
 using UnityEditor;
+using System;
 
 [CustomEditor(typeof(Spline))]
 [CanEditMultipleObjects]
 public class SplineEditor : Editor {
+
+    public static event Action onSplineEdited;
+
     SerializedProperty curveType;
+    SerializedProperty normals2D;
+    SerializedProperty normalsRotation;
     SerializedProperty strength;
     SerializedProperty controlPoints;
     SerializedProperty raysLength;
@@ -12,6 +18,8 @@ public class SplineEditor : Editor {
 
     void OnEnable() {
         curveType = serializedObject.FindProperty("curveType");
+        normals2D = serializedObject.FindProperty("normals2D");
+        normalsRotation = serializedObject.FindProperty("normalsRotation");
         strength = serializedObject.FindProperty("strength");
         controlPoints = serializedObject.FindProperty("controlPoints");
         raysLength = serializedObject.FindProperty("raysLength");
@@ -23,6 +31,11 @@ public class SplineEditor : Editor {
 
         serializedObject.Update();
         EditorGUILayout.PropertyField(curveType);
+        EditorGUILayout.PropertyField(normals2D);
+
+        if (normals2D.boolValue) {
+            EditorGUILayout.PropertyField(normalsRotation);
+        }
 
         if (script.GetCurveType() == Curve.CurveType.Cardinal) {
             EditorGUILayout.PropertyField(strength);
@@ -42,13 +55,16 @@ public class SplineEditor : Editor {
     public void OnSceneGUI() {
         Spline script = (Spline)target;
 
-        
-        for (int i = 0; i < script.controlPoints.Count; i++) {
+        Handles.matrix = script.transform.localToWorldMatrix;
+        for (int i = 0; i < script.GetControlPoints().Count; i++) {
             EditorGUI.BeginChangeCheck();
-            Vector3 newPos = Handles.PositionHandle(script.controlPoints[i], Quaternion.identity);
+
+            Vector3 newPos = Handles.PositionHandle(script.GetControlPoints()[i], Quaternion.identity);
             if (EditorGUI.EndChangeCheck()) {
                 Undo.RecordObject(target, "Control Point Updated");
-                script.controlPoints[i] = newPos;
+                script.GetControlPoints()[i] = newPos;
+
+                onSplineEdited?.Invoke();
             }
         }
         
