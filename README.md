@@ -1,5 +1,5 @@
 # 〰️SPLINES〰️
-![banner](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/banner.gif)
+![banner](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/banner.jpg)
 
 In this repository, I have implemented a tool for creating and editing splines. The scripts give easy access to points on curve and the ability to get the position, tangent, normal and binormal at the desired point of the curve.
 
