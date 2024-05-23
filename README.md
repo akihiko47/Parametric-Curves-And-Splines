@@ -26,7 +26,14 @@ Redactor is automatically connected to a GameObject that has a `Spline` componen
 You can see a simple example of how to use it in the [Curve Animator](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Assets/Scripts/Curves/Curve%20Animator.cs) file. This script animates object along spline. Curve information can be accesed using `P()` method of `Spline` class.
 
    ```sh
-   spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal, bool inWorld = false);
+   spline.P(
+      t,
+      out Vector3 vertex,
+      out Vector3 tangent, 
+      out Vector3 normal, 
+      out Vector3 binormal, 
+      bool inWorld = false
+   );
    ```
 
 where:
