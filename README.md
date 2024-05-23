@@ -47,5 +47,8 @@ You can attach `Mesh Generator` script to GameObject for procedural plane mesh g
 
 ## Normals calculation
 You have two options to choose from:
-1) 3D normals. They are calculated using *Frenet normal algorithm* (a rather naive approach), so they are not well suited for mesh generation.
-2) 2D normals. They lock one coordinate, but allow you to rotate normals. These normals are more uniform, so they are better for generating meshes (roads for example).
+1) **3D normals**. They are calculated using *Frenet normal algorithm* (a rather naive approach), so they are not well suited for mesh generation.
+2) **2D normals**. They lock one coordinate, but allow you to rotate normals. These normals are more uniform, so they are better for generating meshes (roads for example).
+
+
+Thank you for reading this 😊!
