@@ -23,14 +23,20 @@ Redactor is automatically connected to a GameObject that has a `Spline` componen
 ![redactor](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/redactor.gif)
 
 ## Usage 🎮
-You can see a simple example of how to use it in the [Curve Animator](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Assets/Scripts/Curves/Curve%20Animator.cs) file. Curve information can be accesed using `P()` method of `Spline` class.
+You can see a simple example of how to use it in the [Curve Animator](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Assets/Scripts/Curves/Curve%20Animator.cs) file. This script animates object along spline. Curve information can be accesed using `P()` method of `Spline` class.
 
    ```sh
-   spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
+   spline.P(t, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal, bool inWorld = false);
    ```
 
-where `t` - position of point on curve [0 -> spline.GetMaxPointInd()]
+where:
+   `t` - position of point on curve [0 -> spline.GetMaxPointInd()]
+   `inWorld` - get point information (vertex, tangent, normal, binormal) in *world* space. Default is *local* space.
+
+## Mesh Generator 📜
+You can attach `Mesh Generator` script to GameObject for procedural plane mesh generation. The mesh will be generated with all necessary information (normals, tangents, uvs). You can control width of the mesh and generation step. Note that this works better with *2D normals* setting turned on.
+
+![road](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/mesh.jpg)
 
 
-
-## 🏗️ Work in progress... 🏗️
+I will be happy if you find this project useful!

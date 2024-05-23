@@ -8,42 +8,24 @@ public class SplineEditor : Editor {
 
     public static event Action onSplineEdited;
 
-    SerializedProperty curveType;
-    SerializedProperty normals2D;
-    SerializedProperty normalsRotation;
-    SerializedProperty strength;
-    SerializedProperty controlPoints;
-    SerializedProperty raysLength;
-    SerializedProperty drawStep;
-
-    void OnEnable() {
-        curveType = serializedObject.FindProperty("curveType");
-        normals2D = serializedObject.FindProperty("normals2D");
-        normalsRotation = serializedObject.FindProperty("normalsRotation");
-        strength = serializedObject.FindProperty("strength");
-        controlPoints = serializedObject.FindProperty("controlPoints");
-        raysLength = serializedObject.FindProperty("raysLength");
-        drawStep = serializedObject.FindProperty("drawStep");
-    }
-
     public override void OnInspectorGUI() {
         Spline script = (Spline)target;
 
         serializedObject.Update();
-        EditorGUILayout.PropertyField(curveType);
-        EditorGUILayout.PropertyField(normals2D);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("curveType"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("normals2D"));
 
-        if (normals2D.boolValue) {
-            EditorGUILayout.PropertyField(normalsRotation);
+        if (serializedObject.FindProperty("normals2D").boolValue) {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("normalsRotation"));
         }
 
         if (script.GetCurveType() == Curve.CurveType.Cardinal) {
-            EditorGUILayout.PropertyField(strength);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("strength"));
         }
 
-        EditorGUILayout.PropertyField(controlPoints);
-        EditorGUILayout.PropertyField(raysLength);
-        EditorGUILayout.PropertyField(drawStep);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("controlPoints"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("raysLength"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("drawStep"));
 
         if (GUILayout.Button("Reset Control Points")) {
             script.ResetControlPoints();
