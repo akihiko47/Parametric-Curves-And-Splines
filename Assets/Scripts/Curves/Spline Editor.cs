@@ -6,32 +6,63 @@ using System;
 [CanEditMultipleObjects]
 public class SplineEditor : Editor {
 
+    SerializedProperty curveType;
+    SerializedProperty normals2D;
+    SerializedProperty normalsRotation;
+    SerializedProperty strength;
+    SerializedProperty controlPoints;
+    SerializedProperty raysLength;
+    SerializedProperty drawStep;
+
     public static event Action onSplineEdited;
 
+    private void OnEnable() {
+        curveType = serializedObject.FindProperty("curveType");
+        normals2D = serializedObject.FindProperty("normals2D");
+        normalsRotation = serializedObject.FindProperty("normalsRotation");
+        strength = serializedObject.FindProperty("strength");
+        controlPoints = serializedObject.FindProperty("controlPoints");
+        raysLength = serializedObject.FindProperty("raysLength");
+        drawStep = serializedObject.FindProperty("drawStep");
+    }
+
     public override void OnInspectorGUI() {
+        serializedObject.Update();
         Spline script = (Spline)target;
 
-        serializedObject.Update();
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("curveType"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("normals2D"));
+        EditorGUI.BeginChangeCheck();
 
-        if (serializedObject.FindProperty("normals2D").boolValue) {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("normalsRotation"));
-        }
+        EditorGUILayout.PropertyField(curveType);
 
         if (script.GetCurveType() == Curve.CurveType.Cardinal) {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("strength"));
+            EditorGUILayout.PropertyField(strength);
         }
+        EditorGUILayout.Space(5);
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("controlPoints"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("raysLength"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("drawStep"));
+        EditorGUILayout.PropertyField(normals2D);
+
+        if (normals2D.boolValue) {
+            EditorGUILayout.PropertyField(normalsRotation);
+        }
+        EditorGUILayout.Space(5);
+
+        EditorGUILayout.PropertyField(controlPoints);
+        EditorGUILayout.Space(5);
+
+        EditorGUILayout.PropertyField(raysLength);
+        EditorGUILayout.PropertyField(drawStep);
 
         if (GUILayout.Button("Reset Control Points")) {
             script.ResetControlPoints();
         }
 
         serializedObject.ApplyModifiedProperties();
+
+        if (EditorGUI.EndChangeCheck()) {
+            Undo.RecordObject(target, "Spline Changed");
+
+            onSplineEdited?.Invoke();
+        }
     }
 
     public void OnSceneGUI() {

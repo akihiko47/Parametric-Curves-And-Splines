@@ -8,23 +8,34 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 public class MeshGenerator : MonoBehaviour {
 
-    [SerializeField, Range(0.05f, 10f)]
+    [SerializeField, Min(0.05f)]
     private float meshWidth = 1f;
 
-    [SerializeField, Range(0.01f, 1f)]
+    [SerializeField, Min(0.01f)]
     private float meshStep = 0.03f;
+
+    [SerializeField]
+    private bool animated = false;
+
+    [SerializeField, Min(0.01f)]
+    private float animationTime = 3f;
+
+    private float animatedMeshStep;
+    private bool animating = false;
 
     private Mesh mesh;
 
+    private void Start() {
+        AnimateMeshGeneration();
+    }
+
     private void OnEnable() {
         SplineEditor.onSplineEdited += GenerateMesh;
+        MeshGeneratorEditor.onMeshEdited += GenerateMesh;
     }
     private void OnDisable() {
         SplineEditor.onSplineEdited -= GenerateMesh;
-    }
-
-    private void Update() {
-        GenerateMesh();
+        MeshGeneratorEditor.onMeshEdited -= GenerateMesh;
     }
 
     public void GenerateMesh() {
@@ -45,7 +56,13 @@ public class MeshGenerator : MonoBehaviour {
         int trisIndex = 0;
 
         for(int i = 0; i < meshPointsNum; i++) {
-            spline.P(i * meshStep, out Vector3 vertex, out Vector3 tangent, out Vector3 normal, out Vector3 binormal);
+            spline.P(
+                i * (animating ? animatedMeshStep : meshStep), 
+                out Vector3 vertex, 
+                out Vector3 tangent, 
+                out Vector3 normal, 
+                out Vector3 binormal
+            );
 
             vertices[vertIndex] = vertex + binormal * meshWidth * 0.5f;
             vertices[vertIndex + 1] = vertex - binormal * meshWidth * 0.5f;
@@ -79,5 +96,29 @@ public class MeshGenerator : MonoBehaviour {
         mesh.tangents = tangents;
         mesh.uv = uv;
         mesh.triangles = triangles;
+    }
+
+    public void AnimateMeshGeneration() {
+        StartCoroutine(MeshGenerationAnimation());
+    }
+
+    private IEnumerator MeshGenerationAnimation() {
+        animating = true;
+
+        float t = 0f;
+        while (t <= animationTime) {
+            if(!animated) {
+                break;
+            }
+
+            animatedMeshStep = Mathf.Lerp(0f, meshStep, t / animationTime);
+            GenerateMesh();
+
+            t += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        animating = false;
+        GenerateMesh();
     }
 }
