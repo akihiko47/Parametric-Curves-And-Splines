@@ -45,6 +45,11 @@ You can attach `Mesh Generator` script to GameObject for procedural plane mesh g
 
 ![road](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/mesh.jpg)
 
+## Mesh Animation 🎞️
+`Mesh Generator` script allows you to animate mesh generation. You can specify animation time and call it with `AnimateMeshGeneration()` method of `MeshGenerator` class.
+
+![animation](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/animation.gif)
+
 ## Normals calculation
 You have two options to choose from:
 1) **3D normals**. They are calculated using *Frenet normal algorithm* (a rather naive approach), so they are not well suited for mesh generation.

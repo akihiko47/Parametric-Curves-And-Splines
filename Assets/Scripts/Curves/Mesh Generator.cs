@@ -45,12 +45,13 @@ public class MeshGenerator : MonoBehaviour {
         mesh.name = "Procedural Mesh";
 
         int meshPointsNum = Mathf.FloorToInt(spline.GetMaxPointInd() / meshStep);
+        int endDetailNum = 8;
 
-        Vector3[] vertices = new Vector3[meshPointsNum * 2];
+        Vector3[] vertices = new Vector3[meshPointsNum * 2 + endDetailNum + 1];
         Vector3[] normals = new Vector3[vertices.Length];
         Vector4[] tangents = new Vector4[vertices.Length];
         Vector2[] uv = new Vector2[vertices.Length];
-        int[] triangles = new int[2 * (meshPointsNum - 1) * 3];
+        int[] triangles = new int[2 * (meshPointsNum - 1) * 3 + endDetailNum * 3];
 
         int vertIndex = 0;
         int trisIndex = 0;
@@ -87,6 +88,36 @@ public class MeshGenerator : MonoBehaviour {
                 triangles[trisIndex + 5] = vertIndex + 3;
             }
 
+            if (i == meshPointsNum - 1) {
+                vertIndex += 2;
+                trisIndex += 3;
+
+                int circleStartInd = vertIndex;
+                vertices[vertIndex] = vertex;
+                normals[vertIndex] = normal;
+                tangents[vertIndex] = tangent;
+                uv[vertIndex] = new Vector2(0.5f, completed);
+                vertIndex += 1;
+
+                for (int j = 0; j < endDetailNum; j++) {
+                    vertices[vertIndex] = vertex + 
+                        (((binormal * Mathf.Cos(Mathf.PI / (endDetailNum - 1) * j)) + (tangent * Mathf.Sin(Mathf.PI / (endDetailNum - 1) * j))).normalized 
+                        * meshWidth * 0.5f);
+                    normals[vertIndex] = normal;
+                    tangents[vertIndex] = new Vector4(Mathf.Cos(Mathf.PI / (endDetailNum - 1) * j), 0f, Mathf.Sin(Mathf.PI / (endDetailNum - 1) * j), -1);
+                    uv[vertIndex] = new Vector2(j / endDetailNum, completed);
+
+                    if (j < endDetailNum - 1) {
+                        triangles[trisIndex] = circleStartInd;
+                        triangles[trisIndex + 1] = vertIndex;
+                        triangles[trisIndex + 2] = vertIndex + 1;
+                    }
+
+                    vertIndex += 1;
+                    trisIndex += 3;
+                }
+            }
+
             vertIndex += 2;
             trisIndex += 6;
         }
@@ -111,7 +142,7 @@ public class MeshGenerator : MonoBehaviour {
                 break;
             }
 
-            animatedMeshStep = Mathf.Lerp(0f, meshStep, t / animationTime);
+            animatedMeshStep = Mathf.Lerp(0f, meshStep, Mathf.SmoothStep(0f, 1f, t / animationTime));
             GenerateMesh();
 
             t += Time.deltaTime;
