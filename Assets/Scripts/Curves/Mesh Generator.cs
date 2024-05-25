@@ -23,6 +23,8 @@ public class MeshGenerator : MonoBehaviour {
     private float animatedMeshStep;
     private bool animating = false;
 
+    private int endDetailNum = 8;
+
     private Mesh mesh;
 
     private void Start() {
@@ -39,56 +41,25 @@ public class MeshGenerator : MonoBehaviour {
     }
 
     public void GenerateMesh() {
-        Spline spline = GetComponent<Spline>();
 
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
-        mesh.name = "Procedural Mesh";
+        mesh.name = "Procedural Spline Mesh"; 
 
-        int meshPointsNum = Mathf.FloorToInt(spline.GetMaxPointInd() / meshStep);
-        int endDetailNum = 8;
+        
+        //Vector3[] normals = new Vector3[vertices.Length];
+        //Vector4[] tangents = new Vector4[vertices.Length];
+        //Vector2[] uv = new Vector2[vertices.Length];
 
-        Vector3[] vertices = new Vector3[meshPointsNum * 2 + endDetailNum + 1];
-        Vector3[] normals = new Vector3[vertices.Length];
-        Vector4[] tangents = new Vector4[vertices.Length];
-        Vector2[] uv = new Vector2[vertices.Length];
-        int[] triangles = new int[2 * (meshPointsNum - 1) * 3 + endDetailNum * 3];
+        //int[] triangles = new int[2 * (meshPointsNum - 1) * 3 + endDetailNum * 3];
 
-        int vertIndex = 0;
-        int trisIndex = 0;
+       
 
-        for(int i = 0; i < meshPointsNum; i++) {
-            spline.P(
-                i * (animating ? animatedMeshStep : meshStep), 
-                out Vector3 vertex, 
-                out Vector3 tangent, 
-                out Vector3 normal, 
-                out Vector3 binormal
-            );
 
-            vertices[vertIndex] = vertex + binormal * meshWidth * 0.5f;
-            vertices[vertIndex + 1] = vertex - binormal * meshWidth * 0.5f;
+            //float completed = i / (float)(meshPointsNum - 1);
+            //uv[vertIndex] = new Vector2(0, completed);
+            //uv[vertIndex + 1] = new Vector2(1, completed);
 
-            float completed = i / (float)(meshPointsNum - 1);
-            uv[vertIndex] = new Vector2(0, completed);
-            uv[vertIndex + 1] = new Vector2(1, completed);
-
-            normals[vertIndex] = normal;
-            normals[vertIndex + 1] = normal;
-
-            tangents[vertIndex] = new Vector4(tangent.x, tangent.y, tangent.z, -1);
-            tangents[vertIndex + 1] = new Vector4(tangent.x, tangent.y, tangent.z, -1);
-
-            if (i < meshPointsNum - 1) {
-                triangles[trisIndex] = vertIndex;
-                triangles[trisIndex + 1] = vertIndex + 2;
-                triangles[trisIndex + 2] = vertIndex + 1;
-
-                triangles[trisIndex + 3] = vertIndex + 1;
-                triangles[trisIndex + 4] = vertIndex + 2;
-                triangles[trisIndex + 5] = vertIndex + 3;
-            }
-
-            if (i == meshPointsNum - 1) {
+           /* if (i == meshPointsNum - 1) {
                 vertIndex += 2;
                 trisIndex += 3;
 
@@ -116,17 +87,128 @@ public class MeshGenerator : MonoBehaviour {
                     vertIndex += 1;
                     trisIndex += 3;
                 }
-            }
+            }*/
 
-            vertIndex += 2;
-            trisIndex += 6;
+
+
+        mesh.vertices = CreateVertices();
+        mesh.triangles = CreateTriangles();
+        mesh.RecalculateNormals();
+    }
+
+    private void OnDrawGizmos() {
+        if (mesh.vertices == null) {
+            return;
+        }
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.color = Color.black;
+        for (int i = 0; i < mesh.vertices.Length; i++) {
+            Gizmos.DrawSphere(mesh.vertices[i], 0.05f);
+        }
+    }
+
+    private Vector3[] CreateVertices() {
+        Spline spline = GetComponent<Spline>();
+        int meshPointsNum = Mathf.CeilToInt(spline.GetMaxPointInd() / meshStep);
+
+        Vector3[] vertices = new Vector3[meshPointsNum * 2 + (endDetailNum + 1) * 2];
+        int vertIndex = 0;
+
+        for (int i = 0; i < meshPointsNum; i++) {
+            spline.P(
+                i * (animating ? animatedMeshStep : meshStep),
+                out Vector3 vertex,
+                out Vector3 tangent,
+                out Vector3 normal,
+                out Vector3 binormal
+            );
+
+            if (i == 0 || i == meshPointsNum - 1) {
+                vertIndex = CreateSemicircle(vertices, vertIndex, vertex, vertIndex == 0 ? -tangent : tangent, binormal);
+            } else {
+                vertIndex = CreateRegularStep(vertices, vertIndex, vertex, binormal);
+            }
         }
 
-        mesh.vertices = vertices;
-        mesh.normals = normals;
-        mesh.tangents = tangents;
-        mesh.uv = uv;
-        mesh.triangles = triangles;
+        return vertices;
+    }
+
+    private int CreateSemicircle(Vector3[] vertices, int i, Vector3 vertex, Vector3 tangent, Vector3 binormal) {
+        vertices[i] = vertex;
+        for (int j = 1; j < endDetailNum + 1; j++) {
+            vertices[i + j] =
+                vertices[i] +
+                (((binormal * Mathf.Cos(Mathf.PI / (endDetailNum - 1) * (j - 1))) + (tangent * Mathf.Sin(Mathf.PI / (endDetailNum - 1) * (j - 1)))).normalized * 
+                meshWidth * 0.5f);
+        }
+        return i + endDetailNum + 1;
+    }
+
+    private int CreateRegularStep(Vector3[] vertices, int i, Vector3 vertex, Vector3 binormal) {
+        vertices[i] = vertex + binormal * meshWidth * 0.5f;
+        vertices[i + 1] = vertex - binormal * meshWidth * 0.5f;
+        return i + 2;
+    }
+
+    private int[] CreateTriangles() {
+        Spline spline = GetComponent<Spline>();
+        int meshPointsNum = Mathf.CeilToInt(spline.GetMaxPointInd() / meshStep);
+
+        int[] triangles = new int[2 * (meshPointsNum) * 3 + 2 * endDetailNum * 3];
+
+        int trisIndex = 0;
+
+        for (int i = 0; i < meshPointsNum; i++) {
+
+            if (i == 0 || i == meshPointsNum - 1) {
+                for (int j = 0; j < endDetailNum; j++) {
+                    int centerVertInd = (i == 0 ? 0 : meshPointsNum * 2 + endDetailNum - 3);
+                    if (j < endDetailNum) {
+                        triangles[trisIndex] = centerVertInd;
+                        triangles[trisIndex + 2] = centerVertInd + j + (i == 0 ? 0 : 1);
+                        triangles[trisIndex + 1] = centerVertInd + j + (i == 0 ? 1 : 0);
+                    }
+                    trisIndex += 3;
+                }
+            } 
+
+            if (i == 0) {
+                triangles[trisIndex] = endDetailNum + 2;
+                triangles[trisIndex + 1] = endDetailNum;
+                triangles[trisIndex + 2] = 1;
+
+                triangles[trisIndex + 3] = 1;
+                triangles[trisIndex + 4] = endDetailNum + 1;
+                triangles[trisIndex + 5] = endDetailNum + 2;
+
+                trisIndex += 6;
+            }
+
+            if (i == meshPointsNum - 3) {
+                triangles[trisIndex] = endDetailNum + 1 + i * 2;
+                triangles[trisIndex + 1] = endDetailNum + 1 + i * 2 + 3;
+                triangles[trisIndex + 2] = endDetailNum + 1 + i * 2 + 1;
+
+                triangles[trisIndex + 3] = endDetailNum + 1 + i * 2 + 3;
+                triangles[trisIndex + 4] = endDetailNum * 2 + i * 2 + 3;
+                triangles[trisIndex + 5] = endDetailNum + 1 + i * 2 + 1;
+
+                trisIndex += 6;
+            }
+
+            if (i < meshPointsNum - 3) {
+                triangles[trisIndex] = endDetailNum + 1 + i * 2;
+                triangles[trisIndex + 1] = endDetailNum + 1 + i * 2 + 2;
+                triangles[trisIndex + 2] = endDetailNum + 1 + i * 2 + 1;
+
+                triangles[trisIndex + 3] = endDetailNum + 1 + i * 2 + 1;
+                triangles[trisIndex + 4] = endDetailNum + 1 + i * 2 + 2;
+                triangles[trisIndex + 5] = endDetailNum + 1 + i * 2 + 3;
+
+                trisIndex += 6;
+            }
+        }
+        return triangles;
     }
 
     public void AnimateMeshGeneration() {
