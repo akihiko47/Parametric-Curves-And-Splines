@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -40,62 +39,6 @@ public class MeshGenerator : MonoBehaviour {
         MeshGeneratorEditor.onMeshEdited -= GenerateMesh;
     }
 
-    public void GenerateMesh() {
-
-        GetComponent<MeshFilter>().mesh = mesh = new Mesh();
-        mesh.name = "Procedural Spline Mesh"; 
-
-        
-        //Vector3[] normals = new Vector3[vertices.Length];
-        //Vector4[] tangents = new Vector4[vertices.Length];
-        //Vector2[] uv = new Vector2[vertices.Length];
-
-        //int[] triangles = new int[2 * (meshPointsNum - 1) * 3 + endDetailNum * 3];
-
-       
-
-
-            //float completed = i / (float)(meshPointsNum - 1);
-            //uv[vertIndex] = new Vector2(0, completed);
-            //uv[vertIndex + 1] = new Vector2(1, completed);
-
-           /* if (i == meshPointsNum - 1) {
-                vertIndex += 2;
-                trisIndex += 3;
-
-                int circleStartInd = vertIndex;
-                vertices[vertIndex] = vertex;
-                normals[vertIndex] = normal;
-                tangents[vertIndex] = tangent;
-                uv[vertIndex] = new Vector2(0.5f, completed);
-                vertIndex += 1;
-
-                for (int j = 0; j < endDetailNum; j++) {
-                    vertices[vertIndex] = vertex + 
-                        (((binormal * Mathf.Cos(Mathf.PI / (endDetailNum - 1) * j)) + (tangent * Mathf.Sin(Mathf.PI / (endDetailNum - 1) * j))).normalized 
-                        * meshWidth * 0.5f);
-                    normals[vertIndex] = normal;
-                    tangents[vertIndex] = new Vector4(Mathf.Cos(Mathf.PI / (endDetailNum - 1) * j), 0f, Mathf.Sin(Mathf.PI / (endDetailNum - 1) * j), -1);
-                    uv[vertIndex] = new Vector2(j / endDetailNum, completed);
-
-                    if (j < endDetailNum - 1) {
-                        triangles[trisIndex] = circleStartInd;
-                        triangles[trisIndex + 1] = vertIndex;
-                        triangles[trisIndex + 2] = vertIndex + 1;
-                    }
-
-                    vertIndex += 1;
-                    trisIndex += 3;
-                }
-            }*/
-
-
-
-        mesh.vertices = CreateVertices();
-        mesh.triangles = CreateTriangles();
-        mesh.RecalculateNormals();
-    }
-
     private void OnDrawGizmos() {
         if (mesh.vertices == null) {
             return;
@@ -105,6 +48,15 @@ public class MeshGenerator : MonoBehaviour {
         for (int i = 0; i < mesh.vertices.Length; i++) {
             Gizmos.DrawSphere(mesh.vertices[i], 0.05f);
         }
+    }
+
+    public void GenerateMesh() {
+        GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        mesh.name = "Procedural Spline Mesh";
+
+        mesh.vertices = CreateVertices();
+        mesh.triangles = CreateTriangles();
+        mesh.RecalculateNormals();
     }
 
     private Vector3[] CreateVertices() {
