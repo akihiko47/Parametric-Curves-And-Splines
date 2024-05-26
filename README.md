@@ -3,12 +3,12 @@
 
 In this repository, I have implemented a tool for creating and editing splines. The scripts give easy access to points on curve and the ability to get the position, tangent, normal and binormal at the desired point of the curve.
 
-## Installation
+## Installation 🔧
 There are 2 ways:
 - import `Splines.unitypackage` via *Assets-Import* Package
 - clone/download this repository and move the `Assets/Scripts/Curves` folder to your Unity project's Assets folder
 
-## Curve types 🔢
+## Curve types 🌫️
 The `Curve` class implements 3 matrices for different curve types. You can switch between types in real time using curves redactor.
 1) **Bézier**
 2) **B-spline**
@@ -50,7 +50,7 @@ You can attach `Mesh Generator` script to GameObject for procedural plane mesh g
 
 ![animation](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/animation.gif)
 
-## Normals calculation
+## Normals calculation 📐
 You have two options to choose from:
 1) **3D normals**. They are calculated using *Frenet normal algorithm* (a rather naive approach), so they are not well suited for mesh generation.
 2) **2D normals**. They lock one coordinate, but allow you to rotate normals. These normals are more uniform, so they are better for generating meshes (roads for example).
