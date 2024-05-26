@@ -56,7 +56,7 @@ public class MeshGenerator : MonoBehaviour {
         mesh.name = "Procedural Spline Mesh";
 
         CreateVertices();
-        mesh.triangles = CreateTriangles();
+        CreateTriangles();
         mesh.RecalculateNormals();
     }
 
@@ -115,44 +115,54 @@ public class MeshGenerator : MonoBehaviour {
         float completed = i / (float)(meshPointsNum - 1);
         uv[i] = new Vector2(0, completed);
         uv[i + 1] = new Vector2(1, completed);
+
         return i + 2;
     }
 
-    private int[] CreateTriangles() {
+    private void CreateTriangles() {
         Spline spline = GetComponent<Spline>();
         int meshPointsNum = Mathf.CeilToInt(spline.GetMaxPointInd() / meshStep);
 
         int[] triangles = new int[2 * (meshPointsNum + 1) * 3 + 2 * (endDetailNum - 1) * 3];
-
         int trisIndex = 0;
 
         for (int i = 0; i < meshPointsNum; i++) {
 
             if (i == 0 || i == meshPointsNum - 1) {
-                for (int j = 0; j < endDetailNum; j++) {
-                    int centerVertInd = (i == 0 ? 0 : meshPointsNum * 2 + endDetailNum + 1);
-                    if (j < endDetailNum) {
-                        triangles[trisIndex] = centerVertInd;
-                        triangles[trisIndex + 2] = centerVertInd + j + (i == 0 ? 0 : 1);
-                        triangles[trisIndex + 1] = centerVertInd + j + (i == 0 ? 1 : 0);
-                    }
-                    trisIndex += 3;
-                }
+                trisIndex = CreateSemicircleTris(triangles, trisIndex, i);
             } 
 
             if (i < meshPointsNum - 1) {
-                triangles[trisIndex] = endDetailNum + 1 + i * 2;
-                triangles[trisIndex + 1] = endDetailNum + 1 + i * 2 + 2;
-                triangles[trisIndex + 2] = endDetailNum + 1 + i * 2 + 1;
-
-                triangles[trisIndex + 3] = endDetailNum + 1 + i * 2 + 1;
-                triangles[trisIndex + 4] = endDetailNum + 1 + i * 2 + 2;
-                triangles[trisIndex + 5] = endDetailNum + 1 + i * 2 + 3;
-
-                trisIndex += 6;
+                trisIndex = CreateRegularStepQuad(triangles, trisIndex, i);
             }
+
         }
-        return triangles;
+        mesh.triangles = triangles;
+    }
+
+    private int CreateRegularStepQuad(int[] triangles, int trisIndex, int i) {
+        triangles[trisIndex] = endDetailNum + 1 + i * 2;
+        triangles[trisIndex + 1] = endDetailNum + 1 + i * 2 + 2;
+        triangles[trisIndex + 2] = endDetailNum + 1 + i * 2 + 1;
+
+        triangles[trisIndex + 3] = endDetailNum + 1 + i * 2 + 1;
+        triangles[trisIndex + 4] = endDetailNum + 1 + i * 2 + 2;
+        triangles[trisIndex + 5] = endDetailNum + 1 + i * 2 + 3;
+
+        return trisIndex + 6;
+    }
+
+    private int CreateSemicircleTris(int[] triangles, int trisIndex, int i) {
+        for (int j = 0; j < endDetailNum; j++) {
+            int centerVertInd = (i == 0 ? 0 : meshPointsNum * 2 + endDetailNum + 1);
+            if (j < endDetailNum) {
+                triangles[trisIndex] = centerVertInd;
+                triangles[trisIndex + 2] = centerVertInd + j + (i == 0 ? 0 : 1);
+                triangles[trisIndex + 1] = centerVertInd + j + (i == 0 ? 1 : 0);
+            }
+            trisIndex += 3;
+        }
+        return trisIndex;
     }
 
     public void AnimateMeshGeneration() {
