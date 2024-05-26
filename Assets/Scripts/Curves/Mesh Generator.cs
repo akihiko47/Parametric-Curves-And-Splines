@@ -19,10 +19,12 @@ public class MeshGenerator : MonoBehaviour {
     [SerializeField, Min(0.01f)]
     private float animationTime = 3f;
 
+    [SerializeField, Range(2, 16)]
+    private int endDetailNum = 8;
+
     private float animatedMeshStep;
     private bool animating = false;
 
-    private int endDetailNum = 8;
     private int meshPointsNum;
 
     private Mesh mesh;

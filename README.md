@@ -41,7 +41,7 @@ where:
    `inWorld` - get point information (vertex, tangent, normal, binormal) in *world* space. Default is *local* space.
 
 ## Mesh Generator 📜
-You can attach `Mesh Generator` script to GameObject for procedural plane mesh generation. The mesh will be generated with all necessary information (normals, tangents, uvs). You can control width of the mesh and generation step. Note that this works better with *2D normals* setting turned on.
+You can attach `Mesh Generator` script to GameObject for procedural plane mesh generation. The mesh will be generated with all necessary information (normals, tangents, uvs) as well as with **rounded ends**. You can control width of the mesh and generation step. Note that this works better with *2D normals* setting turned on.
 
 ![road](https://github.com/akihiko47/Parametric-Curves-And-Splines/blob/main/Images/mesh.jpg)
 

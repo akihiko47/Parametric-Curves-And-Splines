@@ -8,6 +8,7 @@ public class MeshGeneratorEditor : Editor {
 
     SerializedProperty meshWidth;
     SerializedProperty meshStep;
+    SerializedProperty roundness;
     SerializedProperty animated;
     SerializedProperty animationTime;
 
@@ -16,6 +17,7 @@ public class MeshGeneratorEditor : Editor {
     private void OnEnable() {
         meshWidth = serializedObject.FindProperty("meshWidth");
         meshStep = serializedObject.FindProperty("meshStep");
+        roundness = serializedObject.FindProperty("endDetailNum");
         animated = serializedObject.FindProperty("animated");
         animationTime = serializedObject.FindProperty("animationTime");
     }
@@ -29,6 +31,7 @@ public class MeshGeneratorEditor : Editor {
 
         EditorGUILayout.PropertyField(meshWidth);
         EditorGUILayout.PropertyField(meshStep);
+        EditorGUILayout.PropertyField(roundness, new GUIContent("Ends roundness"));
         EditorGUILayout.Space(5);
 
         EditorGUILayout.PropertyField(animated);
